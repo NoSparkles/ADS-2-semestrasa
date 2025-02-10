@@ -1,42 +1,43 @@
+# TODO: rewrite in C
 class Node:
-    def __init__(self, key):
+    def __init__(self, value):
         self.left = None
         self.right = None
-        self.val = key
+        self.val = value
 
 class BSTree:
     def __init__(self):
         self.root = None
 
-    def insert(self, key):
+    def insert(self, value):
         if self.root is None:
-            self.root = Node(key)
+            self.root = Node(value)
         else:
-            self._insert(self.root, key)
+            self._insert(self.root, value)
 
-    def _insert(self, root, key):
-        if key < root.val:
+    def _insert(self, root, value):
+        if value < root.val:
             if root.left is None:
-                root.left = Node(key)
+                root.left = Node(value)
             else:
-                self._insert(root.left, key)
+                self._insert(root.left, value)
         else:
             if root.right is None:
-                root.right = Node(key)
+                root.right = Node(value)
             else:
-                self._insert(root.right, key)
+                self._insert(root.right, value)
 
-    def remove(self, key):
-        self.root = self._remove(self.root, key)
+    def remove(self, value):
+        self.root = self._remove(self.root, value)
 
-    def _remove(self, root, key):
+    def _remove(self, root, value):
         if root is None:
             return root
         
-        if key < root.val:
-            root.left = self._remove(root.left, key)
-        elif key > root.val:
-            root.right = self._remove(root.right, key)
+        if value < root.val:
+            root.left = self._remove(root.left, value)
+        elif value > root.val:
+            root.right = self._remove(root.right, value)
         else:
             if root.left is None:
                 return root.right
