@@ -15,5 +15,6 @@ int main(){
     removeBST(tree, 3);
     balanceBST(tree);
     printInOrderBST(tree);
+    destroyBST(tree);
     return 0;
 }

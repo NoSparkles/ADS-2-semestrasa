@@ -164,3 +164,20 @@ int countNodes(Node* root) {
     }
     return 1 + countNodes(root->left) + countNodes(root->right);
 }
+
+void destroyBSTRec(Node* root) {
+    if (root == NULL) {
+        return;
+    }
+    destroyBSTRec(root->left);
+    destroyBSTRec(root->right);
+    free(root);
+}
+
+void destroyBST(BSTree *tree) {
+    Node* root = tree->root;
+    if (root != NULL) {
+        destroyBSTRec(root);
+    }
+    free(tree);
+}
