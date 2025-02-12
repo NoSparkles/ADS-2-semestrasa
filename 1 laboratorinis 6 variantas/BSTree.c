@@ -112,9 +112,6 @@ void printInOrderBST(BSTree* tree){
     printf("\n");
 }
 
-
-
-// Function to build a balanced BST from a sorted array
 Node* buildBalancedTree(int* nodes, int start, int end) {
     if (start > end) 
         return NULL;
@@ -147,14 +144,11 @@ void balanceBST(BSTree *tree) {
     }
     int index = 0;
 
-    // Store the nodes in sorted order
     storeInorderBST(root, nodes, &index);
 
-    // Build the balanced tree from the sorted nodes
     Node* balancedRoot = buildBalancedTree(nodes, 0, index - 1);
     free(nodes);
 
-    // Update the tree's root with the new balanced root
     tree->root = balancedRoot;
 }
 
