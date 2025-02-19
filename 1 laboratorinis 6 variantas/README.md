@@ -6,7 +6,7 @@ This project contains an implementation of a Binary Search Tree (BST) in C. The 
 
 - `BSTree.h`: Header file containing the declarations of the BST functions and structures.
 - `BSTree.c`: Source file containing the implementations of the BST functions.
-- `test.c`: Test file to demonstrate the usage of the BST functions.
+- `demo.c`: Demo file to demonstrate the usage of the BST functions.
 - `makefile`: Makefile to compile and run the test program.
 
 ## Functions
