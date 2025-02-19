@@ -152,6 +152,20 @@ void balanceBST(BSTree *tree) {
     tree->root = balancedRoot;
 }
 
+Node* searchBST(BSTree* tree, int value) {
+    Node* current = tree->root;
+    while (current != NULL) {
+        if (value == current->value) {
+            return current;
+        } else if (value < current->value) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+    }
+    return NULL;
+}
+
 int countNodes(Node* root) {
     if (root == NULL) {
         return 0;

@@ -9,6 +9,7 @@ int main(){
     insertBST(tree, 4);
     insertBST(tree, 6);
     insertBST(tree, 8);
+    searchBST(tree, 4);
     printInOrderBST(tree);
     removeBST(tree, 5);
     printInOrderBST(tree);
