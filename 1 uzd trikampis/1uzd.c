@@ -5,6 +5,14 @@ typedef struct {
     int y;
 } Point;
 
+int isTriangle(Point a, Point b, Point c) {
+    int ab = distanceSquared(a, b);
+    int bc = distanceSquared(b, c);
+    int ca = distanceSquared(c, a);
+
+    return (ab + bc > ca && ab + ca > bc && bc + ca > ab);
+}
+
 int distanceSquared(Point a, Point b) {
     return (b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y);
 }
