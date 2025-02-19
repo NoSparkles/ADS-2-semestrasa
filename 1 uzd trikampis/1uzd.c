@@ -9,21 +9,18 @@ int distanceSquared(Point a, Point b) {
     return (b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y);
 }
 
-int isTriangle(Point a, Point b, Point c) {
-    int ab = distanceSquared(a, b);
-    int bc = distanceSquared(b, c);
-    int ca = distanceSquared(c, a);
-
+int isTriangle(int ab, int bc, int ca) {
     return (ab + bc > ca && ab + ca > bc && bc + ca > ab);
 }
 
 int isRightTriangle(Point a, Point b, Point c) {
-    if (!isTriangle(a, b, c)) {
-        return 0;
-    }
     int ab = distanceSquared(a, b);
     int bc = distanceSquared(b, c);
     int ca = distanceSquared(c, a);
+
+    if (!isTriangle(ab, bc, ca)) {
+        return 0;
+    }
 
     return (ab + bc == ca || ab + ca == bc || bc + ca == ab);
 }
