@@ -166,11 +166,38 @@ Node* searchBST(BSTree* tree, int value) {
     return NULL;
 }
 
+int getHeightBST(Node* root) {
+    if (root == NULL) {
+        return -1;
+    } else {
+        int leftHeight = getHeightBST(root->left);
+        int rightHeight = getHeightBST(root->right);
+
+        return (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
+    }
+}
+
 int countNodes(Node* root) {
     if (root == NULL) {
         return 0;
     }
     return 1 + countNodes(root->left) + countNodes(root->right);
+}
+
+void clearBSTRec(Node* node) {
+    if (node == NULL) {
+        return;
+    }
+    clearBSTRec(node->left);
+    clearBSTRec(node->right);
+    free(node);
+}
+
+void clearBST(BSTree* tree) {
+    if (tree->root != NULL) {
+        clearBSTRec(tree->root);
+        tree->root = NULL;
+    }
 }
 
 void destroyBSTRec(Node* root) {

@@ -16,5 +16,7 @@ void removeBST(BSTree*, int);
 Node* searchBST(BSTree*, int);
 void balanceBST(BSTree*);
 void printInOrderBST(BSTree*);
+int getHeightBST(Node*);
+void clearBST(BSTree*);
 int countNodes(Node*);
 void destroyBST(BSTree*);

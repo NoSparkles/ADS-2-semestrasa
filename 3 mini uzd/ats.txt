@@ -1,26 +1,4 @@
 Vardai:
 
-Robert -> Artūras;  // left
-Robert -> Ugnė;     // right
-Artūras -> Aurimas; // left
-Artūras -> Paulius; // right
-Aurimas -> Daimonas;  // left
-Aurimas -> Dominykas; // right
-Dominykas -> Dominykas; // left
-Dominykas -> Emilija;   // right
-Emilija -> Kasparas Girėnas; // left
-Emilija -> Augustinas;       // right
-
-Pavardes: 
-
-Šatkevič -> Timofejevas; // left
-Šatkevič -> Stakeliūnas; // right
-Timofejevas -> Vižinis;  // left
-Timofejevas -> Radzišauskas; // right
-Vižinis -> Jocys;        // left
-Vižinis -> Nemanis;      // right
-Nemanis -> Pacevičiūtė;  // left
-Nemanis -> Pavlavičius;  // right
-Pavlavičius -> Punis;    // left
-Pavlavičius -> Rimšelytė; // right
-Rimšelytė -> Semenčiuk;  // right      
+Robert -> Artūras // left
+Artūras -> Aurimas // right

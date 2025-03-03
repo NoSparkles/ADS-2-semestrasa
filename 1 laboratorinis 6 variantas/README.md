@@ -20,7 +20,9 @@ This project contains an implementation of a Binary Search Tree (BST) in C. The 
 - `Node* searchBST(BSTree* tree, int value)`: Searches for a value in the BST.
 - `void balanceBST(BSTree* tree)`: Balances the BST.
 - `void printInOrderBST(BSTree* tree)`: Prints the BST in in-order traversal.
+- `int getHeightBST(Node* root)`: Returns the height of the BST.
 - `int countNodes(Node* root)`: Counts the number of nodes in the BST.
+- `void clearBST(BSTree* tree)`: Clears the BST, and frees the nodes.
 - `void destroyBST(BSTree* tree)`: Destroys the BST and frees the memory.
 
 ### BSTree.c
