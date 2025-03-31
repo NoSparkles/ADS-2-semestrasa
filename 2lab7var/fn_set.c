@@ -64,7 +64,7 @@ int place_bishops_with_timeout(int **board, int bishops, int n) {
     for (int row = 0; row < n; row++) {
         for (int col = 0; col < n; col++) {
             // Check elapsed time
-            if (((clock() - start_time) * 1000 / CLOCKS_PER_SEC) > timeout_ms) {
+            if (timeout_ms != -1 && ((clock() - start_time) * 1000 / CLOCKS_PER_SEC) > timeout_ms) {
                 result_status = -1; // Update global result to timeout
                 printf("Timeout reached!\n");
                 return -1; // Indicate timeout
@@ -87,7 +87,7 @@ int place_bishops_with_timeout(int **board, int bishops, int n) {
 }
 
 // Function to solve the N bishops problem
-void solve_n_bishops(int n, int timeout) {
+int **solve_n_bishops(int n, int timeout) {
     timeout_ms = timeout; // Set the timeout in milliseconds
     // Allocate the board dynamically
     int **board = (int **)malloc(n * sizeof(int *));
@@ -102,25 +102,9 @@ void solve_n_bishops(int n, int timeout) {
 
     // Call the recursive function and check the result
     result_status = place_bishops_with_timeout(board, BISHOPS, n);
-    if (result_status == 1) {
-        printf("\nSolution:\n");
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                printf("%c ", board[i][j] == 1 ? 'B' : '.');
-            }
-            printf("\n");
-        }
-    } else if (result_status == -1) {
-        printf("No solution found due to timeout.\n");
-    } else {
-        result_status = 0; // Update global result to no solution
-        printf("No solution found.\n");
-    }
 
-    // Free the allocated memory
-    for (int i = 0; i < n; i++) {
-        free(board[i]);
+    if (result_status == 1) {
+        return board;
     }
-    free(board);
 }
 

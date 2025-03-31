@@ -5,6 +5,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-void solve_n_bishops(int n, int timeout);
+int **solve_n_bishops(int n, int timeout);
 
 #endif // FN_SET_H

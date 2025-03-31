@@ -18,12 +18,16 @@ unsigned long long factorial(int num) {
 
 // Function to calculate C(n, k)
 unsigned long long combination(int n, int k) {
-    return factorial(n) / (factorial(k) * factorial(n - k));
+    unsigned long long result = 1;
+    for (int i = 0; i < k; i++) {
+        result *= (n - i);   // Multiply numerator
+        result /= (i + 1);   // Divide by denominator step-by-step
+    }
+    return result;
 }
 
-
-void handle_timeout(int completed_iterations, int total_iterations) {
-    double percentage = (double)completed_iterations / total_iterations * 100.0;
+void handle_timeout(unsigned long long completed_iterations, unsigned long long total_iterations) {
+    double percentage = ((double)completed_iterations / (double)total_iterations) * 100.0;
     fprintf(stderr, "Program terminated due to timeout. Completed %.2f%% of the search.\n", percentage);
 }
 
@@ -79,16 +83,26 @@ int main(int argc, char *argv[]) {
     }
 
     // Paleisti problemos sprendimą
-    solve_n_bishops(n, timeout);
+    int **board = solve_n_bishops(n, timeout);
 
-    // Patikrinti timeout būklę
-    if (timeout > 0) {
-        // Čia būtų realizuotas timeout mechanizmas
-        handle_timeout(iterations, combination(n, BISHOPS));
-        return 0;
+    if (result_status == 1) {
+        printf("Solution:\n");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                printf("%c ", board[i][j] == 1 ? 'B' : '.');
+            }
+            printf("\n");
+        }
+    } else if (result_status == -1) {
+        handle_timeout(iterations, combination(n * n, BISHOPS));
+    } else {
+        printf("No solution found.\n");
     }
 
-    printf("Solution completed successfully.\n");
-
+    // Free the allocated memory
+    for (int i = 0; i < n; i++) {
+        free(board[i]);
+    }
+    free(board);
     return 0;
 }
