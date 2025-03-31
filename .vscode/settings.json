@@ -59,6 +59,7 @@
   "files.associations": {
     "stdio.h": "c",
     "fn_set.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "functional": "c"
   }
 }

@@ -3,9 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 extern int BISHOPS;
-extern unsigned long long count;// Global variable to count the number of solutions
+extern unsigned long long iterations;// Global variable to count the number of solutions
+extern int result_status; // Indicates the result (0 for no solution, 1 for success, -1 for timeout)
+clock_t start_time; // Global variable to store the start time
+int timeout_ms; // Timeout in milliseconds
 
 int all_cells_controlled(int **board, int n) {
     int **controlled = (int **)malloc(n * sizeof(int *));
@@ -51,19 +55,29 @@ int all_cells_controlled(int **board, int n) {
     return all_controlled;
 }
 
-// Recursive function to place bishops
-int place_bishops(int **board, int bishops, int n) {
+int place_bishops_with_timeout(int **board, int bishops, int n) {
     if (bishops == 0) {
-        ++count; // Increment the count of solutions
+        ++iterations; // Increment the count of solutions
         return all_cells_controlled(board, n); // Check if all cells are controlled
     }
 
     for (int row = 0; row < n; row++) {
         for (int col = 0; col < n; col++) {
+            // Check elapsed time
+            if (((clock() - start_time) * 1000 / CLOCKS_PER_SEC) > timeout_ms) {
+                result_status = -1; // Update global result to timeout
+                printf("Timeout reached!\n");
+                return -1; // Indicate timeout
+            }
+
             if (board[row][col] == 0) { // Check if the cell is empty
                 board[row][col] = 1; // Place a bishop
-                if (place_bishops(board, bishops - 1, n)) {
+                int result = place_bishops_with_timeout(board, bishops - 1, n);
+                if (result == 1) {
+                    result_status = 1; // Update global result to success
                     return 1; // If successful, return true
+                } else if (result == -1) {
+                    return -1; // Timeout encountered
                 }
                 board[row][col] = 0; // Backtrack
             }
@@ -72,25 +86,34 @@ int place_bishops(int **board, int bishops, int n) {
     return 0; // No solution found
 }
 
-// Function to solve the 8 bishops problem
-void solve_n_bishops(int n) {
-
+// Function to solve the N bishops problem
+void solve_n_bishops(int n, int timeout) {
+    timeout_ms = timeout; // Set the timeout in milliseconds
     // Allocate the board dynamically
     int **board = (int **)malloc(n * sizeof(int *));
     for (int i = 0; i < n; i++) {
         board[i] = (int *)calloc(n, sizeof(int));
     }
 
-    if (place_bishops(board, BISHOPS, n)) {
-        // Print the solution
-        printf("\n");
+    // Start the timer
+    start_time = clock();
+
+    // Recursive function to place bishops with timeout handlin
+
+    // Call the recursive function and check the result
+    result_status = place_bishops_with_timeout(board, BISHOPS, n);
+    if (result_status == 1) {
+        printf("\nSolution:\n");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 printf("%c ", board[i][j] == 1 ? 'B' : '.');
             }
             printf("\n");
         }
+    } else if (result_status == -1) {
+        printf("No solution found due to timeout.\n");
     } else {
+        result_status = 0; // Update global result to no solution
         printf("No solution found.\n");
     }
 
@@ -100,3 +123,4 @@ void solve_n_bishops(int n) {
     }
     free(board);
 }
+

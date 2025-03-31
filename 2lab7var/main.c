@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include "fn_set.h"
 
-unsigned long long count = 0;
+unsigned long long iterations = 0;
 int BISHOPS = 8;
+int result_status = 0; // Indicates the result (0 for no solution, 1 for success, -1 for timeout)
 
 // Function to calculate factorial of a number
 unsigned long long factorial(int num) {
@@ -78,12 +79,12 @@ int main(int argc, char *argv[]) {
     }
 
     // Paleisti problemos sprendimą
-    solve_n_bishops(n);
+    solve_n_bishops(n, timeout);
 
     // Patikrinti timeout būklę
     if (timeout > 0) {
         // Čia būtų realizuotas timeout mechanizmas
-        handle_timeout(count, combination(n, BISHOPS));
+        handle_timeout(iterations, combination(n, BISHOPS));
         return 0;
     }
 
