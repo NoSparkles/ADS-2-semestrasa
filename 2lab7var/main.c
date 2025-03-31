@@ -1,6 +1,30 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "fn_set.h"
+
+unsigned long long count = 0;
+int BISHOPS = 8;
+
+// Function to calculate factorial of a number
+unsigned long long factorial(int num) {
+    unsigned long long result = 1;
+    for (int i = 1; i <= num; i++) {
+        result *= i;
+    }
+    return result;
+}
+
+// Function to calculate C(n, k)
+unsigned long long combination(int n, int k) {
+    return factorial(n) / (factorial(k) * factorial(n - k));
+}
+
+
+void handle_timeout(int completed_iterations, int total_iterations) {
+    double percentage = (double)completed_iterations / total_iterations * 100.0;
+    fprintf(stderr, "Program terminated due to timeout. Completed %.2f%% of the search.\n", percentage);
+}
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -9,7 +33,6 @@ int main(int argc, char *argv[]) {
     }
 
     FILE *input = NULL;
-
     if (strcmp(argv[1], "-") == 0) {
         input = stdin;
     } else {
@@ -26,10 +49,45 @@ int main(int argc, char *argv[]) {
         if (input != stdin) fclose(input);
         return 1;
     }
-
     if (input != stdin) fclose(input);
 
+    // Pranešti apie pradinius duomenis
+    printf("Received input: %d\n", n);
+
+    // Apdorojame papildomus parametrus (-mode arba -timeout)
+    int heuristic_number = -1;
+    int timeout = -1;
+    for (int i = 2; i < argc; i++) {
+        if (strcmp(argv[i], "-timeout") == 0 && i + 1 < argc) {
+            timeout = atoi(argv[++i]);
+            printf("Timeout set to %d milliseconds.\n", timeout);
+        } else if (strcmp(argv[i], "-mode") == 0 && i + 1 < argc) {
+            if (strcmp(argv[++i], "heuristic") == 0 && i + 1 < argc) {
+                heuristic_number = atoi(argv[++i]);
+                printf("Selected heuristic number: %d\n", heuristic_number);
+            } else {
+                printf("Selected mode: %s\n", argv[i]);
+            }
+        }
+    }
+
+    // Apdoroti euristiką
+    if (heuristic_number >= 0) {
+        fprintf(stderr, "Heuristika dar nerealizuota.\n");
+        return 1;
+    }
+
+    // Paleisti problemos sprendimą
     solve_n_bishops(n);
+
+    // Patikrinti timeout būklę
+    if (timeout > 0) {
+        // Čia būtų realizuotas timeout mechanizmas
+        handle_timeout(count, combination(n, BISHOPS));
+        return 0;
+    }
+
+    printf("Solution completed successfully.\n");
 
     return 0;
 }

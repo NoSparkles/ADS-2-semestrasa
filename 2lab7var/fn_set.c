@@ -4,9 +4,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define BISHOPS 8
-
-unsigned long long count = 0; // Global variable to count the number of solutions
+extern int BISHOPS;
+extern unsigned long long count;// Global variable to count the number of solutions
 
 int all_cells_controlled(int **board, int n) {
     int **controlled = (int **)malloc(n * sizeof(int *));
