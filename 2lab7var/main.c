@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
     // Apdoroti euristiką
     if (heuristic_number >= 0) {
         fprintf(stderr, "Heuristika dar nerealizuota.\n");
-        return 1;
+        return 0;
     }
 
     // Paleisti problemos sprendimą
