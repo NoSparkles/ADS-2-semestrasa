@@ -86,25 +86,42 @@ int place_bishops_with_timeout(int **board, int bishops, int n) {
     return 0; // No solution found
 }
 
-// Function to solve the N bishops problem
 int **solve_n_bishops(int n, int timeout) {
     timeout_ms = timeout; // Set the timeout in milliseconds
+
     // Allocate the board dynamically
     int **board = (int **)malloc(n * sizeof(int *));
+    if (!board) {
+        fprintf(stderr, "Memory allocation failed for board.\n");
+        return NULL;
+    }
     for (int i = 0; i < n; i++) {
         board[i] = (int *)calloc(n, sizeof(int));
+        if (!board[i]) {
+            fprintf(stderr, "Memory allocation failed for board row %d.\n", i);
+            for (int j = 0; j < i; j++) {
+                free(board[j]);
+            }
+            free(board);
+            return NULL;
+        }
     }
 
     // Start the timer
     start_time = clock();
 
-    // Recursive function to place bishops with timeout handlin
-
     // Call the recursive function and check the result
     result_status = place_bishops_with_timeout(board, BISHOPS, n);
 
     if (result_status == 1) {
-        return board;
+        return board; // Return the board if a solution is found
     }
+
+    // If no solution or timeout, clean up and return NULL
+    for (int i = 0; i < n; i++) {
+        free(board[i]);
+    }
+    free(board);
+    return NULL;
 }
 

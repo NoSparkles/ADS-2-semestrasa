@@ -98,11 +98,13 @@ int main(int argc, char *argv[]) {
     } else {
         printf("No solution found.\n");
     }
-
-    // Free the allocated memory
-    for (int i = 0; i < n; i++) {
-        free(board[i]);
+    if (board != NULL) {
+        for (int i = 0; i < n; i++) {
+            if (board[i] != NULL) {
+                free(board[i]);
+            }
+        }
+        free(board);
     }
-    free(board);
     return 0;
 }
