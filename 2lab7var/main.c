@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 
     // Apdoroti euristiką
     if (heuristic_number > 0) {
-        printf("Heuristika dar nerealizuota.\n");
+        printf("Euristika dar nerealizuota.\n");
         return 0;
     }
 

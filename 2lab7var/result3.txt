@@ -1,8 +1,3 @@
-N = 6
-Solution:
-B B B B B B 
-. . . . . . 
-. . . . . . 
-. . . . . . 
-. . B B . . 
-. . . . . . 
+N = 9
+Timeout reached!
+Program terminated due to timeout. Completed 0.02% of the search.
