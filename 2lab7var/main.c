@@ -7,33 +7,9 @@ unsigned long long iterations = 0;
 int BISHOPS = 8;
 int result_status = 0; // Indicates the result (0 for no solution, 1 for success, -1 for timeout)
 
-// Function to calculate factorial of a number
-unsigned long long factorial(int num) {
-    unsigned long long result = 1;
-    for (int i = 1; i <= num; i++) {
-        result *= i;
-    }
-    return result;
-}
-
-// Function to calculate C(n, k)
-unsigned long long combination(int n, int k) {
-    unsigned long long result = 1;
-    for (int i = 0; i < k; i++) {
-        result *= (n - i);   // Multiply numerator
-        result /= (i + 1);   // Divide by denominator step-by-step
-    }
-    return result;
-}
-
-void handle_timeout(unsigned long long completed_iterations, unsigned long long total_iterations) {
-    double percentage = ((double)completed_iterations / (double)total_iterations) * 100.0;
-    fprintf(stderr, "Program terminated due to timeout. Completed %.2f%% of the search.\n", percentage);
-}
-
 int main(int argc, char *argv[]) {
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s [-|failo_vardas] [-mode [fullSearch|firstMatchSearch|heuristic heuristic_number]] [-timeout miliseconds]\n", argv[0]);
+        printf("Usage: %s [-|failo_vardas] [-mode [fullSearch|firstMatchSearch|heuristic heuristic_number]] [-timeout miliseconds]\n", argv[0]);
         return 1;
     }
 
@@ -43,21 +19,21 @@ int main(int argc, char *argv[]) {
     } else {
         input = fopen(argv[1], "r");
         if (input == NULL) {
-            fprintf(stderr, "Failed to open file: %s\n", argv[1]);
+            printf("Failed to open file: %s\n", argv[1]);
             return 1;
         }
     }
 
     int n;
     if (fscanf(input, "%d", &n) != 1) {
-        fprintf(stderr, "Failed to read number from input.\n");
+        printf("Failed to read number from input.\n");
         if (input != stdin) fclose(input);
         return 1;
     }
     if (input != stdin) fclose(input);
 
     // Pranešti apie pradinius duomenis
-    printf("Received input: %d\n", n);
+    printf("N = %d\n", n);
 
     // Apdorojame papildomus parametrus (-mode arba -timeout)
     int heuristic_number = -1;
@@ -65,20 +41,20 @@ int main(int argc, char *argv[]) {
     for (int i = 2; i < argc; i++) {
         if (strcmp(argv[i], "-timeout") == 0 && i + 1 < argc) {
             timeout = atoi(argv[++i]);
-            printf("Timeout set to %d milliseconds.\n", timeout);
+            //printf("Timeout set to %d milliseconds.\n", timeout);
         } else if (strcmp(argv[i], "-mode") == 0 && i + 1 < argc) {
             if (strcmp(argv[++i], "heuristic") == 0 && i + 1 < argc) {
                 heuristic_number = atoi(argv[++i]);
-                printf("Selected heuristic number: %d\n", heuristic_number);
+                //printf("Selected heuristic number: %d\n", heuristic_number);
             } else {
-                printf("Selected mode: %s\n", argv[i]);
+                //printf("Selected mode: %s\n", argv[i]);
             }
         }
     }
 
     // Apdoroti euristiką
-    if (heuristic_number >= 0) {
-        fprintf(stderr, "Heuristika dar nerealizuota.\n");
+    if (heuristic_number > 0) {
+        printf("Heuristika dar nerealizuota.\n");
         return 0;
     }
 

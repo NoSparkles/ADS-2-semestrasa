@@ -1,6 +1,3 @@
-run: PgmName.exe
-	./PgmName.exe test1.txt -mode heuristic 5 -timeout 5000
-
 PgmName.exe : main.c fn_set.h fn_set.o
 	gcc -std=c99 -o PgmName.exe main.c fn_set.o
 

@@ -11,6 +11,30 @@ extern int result_status; // Indicates the result (0 for no solution, 1 for succ
 clock_t start_time; // Global variable to store the start time
 int timeout_ms; // Timeout in milliseconds
 
+// Function to calculate factorial of a number
+unsigned long long factorial(int num) {
+    unsigned long long result = 1;
+    for (int i = 1; i <= num; i++) {
+        result *= i;
+    }
+    return result;
+}
+
+// Function to calculate C(n, k)
+unsigned long long combination(int n, int k) {
+    unsigned long long result = 1;
+    for (int i = 0; i < k; i++) {
+        result *= (n - i);   // Multiply numerator
+        result /= (i + 1);   // Divide by denominator step-by-step
+    }
+    return result;
+}
+
+void handle_timeout(unsigned long long completed_iterations, unsigned long long total_iterations) {
+    double percentage = ((double)completed_iterations / (double)total_iterations) * 100.0;
+    printf("Program terminated due to timeout. Completed %.2f%% of the search.\n", percentage);
+}
+
 int all_cells_controlled(int **board, int n) {
     int **controlled = (int **)malloc(n * sizeof(int *));
     for (int i = 0; i < n; i++) {
