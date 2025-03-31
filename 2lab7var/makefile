@@ -1,5 +1,5 @@
 run: PgmName.exe
-	./PgmName.exe < test1.txt
+	./PgmName.exe - < test1.txt
 PgmName.exe : main.c fn_set.h fn_set.o
 	gcc -std=c99 -o PgmName.exe main.c fn_set.o
 
