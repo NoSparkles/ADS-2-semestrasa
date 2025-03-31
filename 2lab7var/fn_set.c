@@ -8,46 +8,60 @@
 
 unsigned long long count = 0; // Global variable to count the number of solutions
 
-// Function to check if all cells are controlled by bishops
 int all_cells_controlled(int **board, int n) {
+    int **controlled = (int **)malloc(n * sizeof(int *));
+    for (int i = 0; i < n; i++) {
+        controlled[i] = (int *)calloc(n, sizeof(int));
+    }
+
+    // Mark controlled cells for every bishop
     for (int row = 0; row < n; row++) {
         for (int col = 0; col < n; col++) {
-            int controlled = 0;
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (board[i][j] == 1 && abs(row - i) == abs(col - j)) {
-                        controlled = 1;
-                        break;
-                    }
+            if (board[row][col] == 1) { // If a bishop is present
+                controlled[row][col] = 1; // Mark the bishop's cell as controlled
+
+                // Mark all diagonals
+                for (int i = 1; i < n; i++) {
+                    if (row + i < n && col + i < n) controlled[row + i][col + i] = 1;
+                    if (row + i < n && col - i >= 0) controlled[row + i][col - i] = 1;
+                    if (row - i >= 0 && col + i < n) controlled[row - i][col + i] = 1;
+                    if (row - i >= 0 && col - i >= 0) controlled[row - i][col - i] = 1;
                 }
-                if (controlled) break;
             }
-            if (!controlled) return 0; // If any cell is not controlled
         }
     }
-    return 1; // All cells are controlled
+
+    // Check if all cells are controlled
+    int all_controlled = 1;
+    for (int row = 0; row < n; row++) {
+        for (int col = 0; col < n; col++) {
+            if (!controlled[row][col]) { // If any cell is not controlled
+                all_controlled = 0;
+                break;
+            }
+        }
+        if (!all_controlled) break;
+    }
+
+    // Free allocated memory
+    for (int i = 0; i < n; i++) {
+        free(controlled[i]);
+    }
+    free(controlled);
+
+    return all_controlled;
 }
 
 // Recursive function to place bishops
 int place_bishops(int **board, int bishops, int n) {
-    if (bishops < 0) {
+    if (bishops == 0) {
+        ++count; // Increment the count of solutions
         return all_cells_controlled(board, n); // Check if all cells are controlled
     }
 
     for (int row = 0; row < n; row++) {
         for (int col = 0; col < n; col++) {
             if (board[row][col] == 0) { // Check if the cell is empty
-                ++count; // Increment the count of solutions
-                if (count % 10000000 == 0) { // Print every millionth solution
-                    printf("count: %llu\n", count);
-                    printf("\n");
-                    for (int i = 0; i < n; i++) {
-                        for (int j = 0; j < n; j++) {
-                            printf("%c ", board[i][j] == 1 ? 'B' : '.');
-                        }
-                        printf("\n");
-                    }
-                }
                 board[row][col] = 1; // Place a bishop
                 if (place_bishops(board, bishops - 1, n)) {
                     return 1; // If successful, return true
