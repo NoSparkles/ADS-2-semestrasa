@@ -1,3 +1,5 @@
+// sukurtas mokiniu airu1143 ir pamodifikuotas manimi
+
 #ifndef LONGNUM_H
 #define LONGNUM_H
 

@@ -60,6 +60,10 @@
     "stdio.h": "c",
     "fn_set.h": "c",
     "stdlib.h": "c",
-    "functional": "c"
+    "functional": "c",
+    "clinic.h": "c",
+    "longnum.h": "c",
+    "queue.h": "c",
+    "limits.h": "c"
   }
 }
