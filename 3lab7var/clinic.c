@@ -55,90 +55,78 @@ void readParams(SimulationParams *params, FILE *input) {
 void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *output) {
     srand(time(NULL));
 
-    Queue *localDoctorQueue = create();     // Patients waiting for the doctor
-    Queue *specialistQueue = create();      // Patients waiting for specialists
-    Queue *decisionQueue = create();        // Patients waiting for decision resolution
+    Queue *localDoctorQueue = create();
+    Queue *specialistQueue = create();
+    Queue *decisionQueue = create();
 
-    int total_waiting_time = 0;
-    int total_decision_time = 0;
-    int total_customers = 0;
-    int cured_customers = 0;
-    int money_spent = 0;
-    int total_local_doctor_visits = 0;
-    int total_specialist_visits = 0;
-    int total_decision_events = 0;
+    int availableSpecialists = params->specialist_count;
+
+    int totalWaitingTime = 0;
+    int totalDecisionTime = 0;
+    int decisionEvents = 0;
+
+    stats->total_customers = 0;
+    stats->cured_customers = 0;
+    stats->money_spent = 0;
+    stats->total_local_doctor_visits = 0;
+    stats->total_specialist_visits = 0;
 
     for (int time = 0; time < params->simulation_duration; time++) {
-        // New patient arrival
+        // 1. New patient arrival
         if ((float)rand() / RAND_MAX < params->arrival_probability) {
             enqueue(localDoctorQueue, time);
-            total_customers++;
+            stats->total_customers++;
         }
 
-        // Process the decision queue - Patients whose decision time has expired
+        // 2. Handle patients in decision queue
         while (!is_empty(decisionQueue)) {
             int decisionTime = peek(decisionQueue, NULL);
-            if (decisionTime > time) break; // Stop processing if the time has not yet come
+            if (decisionTime > time) break;
 
-            dequeue(decisionQueue, NULL); // Remove patient from decision queue
-
-            // Determine if the patient is cured or redirected
-            if ((float)rand() / RAND_MAX < 0.7) {
+            dequeue(decisionQueue, NULL);
+            if ((float)rand() / RAND_MAX < 0.7f) {
                 enqueue(specialistQueue, time);
             } else {
-                cured_customers++;
+                stats->cured_customers++;
             }
         }
 
-        // Local doctor decision phase
+        // 3. Local doctor processes one patient
         if (!is_empty(localDoctorQueue)) {
-            bool status = false;
-            int arrivalTime = dequeue(localDoctorQueue, &status);
+            int arrivalTime = dequeue(localDoctorQueue, NULL);
+            int decisionTime = params->local_doctor_decision_time_from +
+                               rand() % (params->local_doctor_decision_time_to - params->local_doctor_decision_time_from + 1);
 
-            // Local doctor's decision time
-            int decision_time = params->local_doctor_decision_time_from + rand() % 
-                                (params->local_doctor_decision_time_to - params->local_doctor_decision_time_from + 1);
-            
-            total_decision_time += decision_time;
-            total_decision_events++;
+            enqueue(decisionQueue, time + decisionTime);
 
-            money_spent += params->local_doctor_salary;
-            total_local_doctor_visits++;
+            stats->total_local_doctor_visits++;
+            stats->money_spent += params->local_doctor_salary;
 
-            // Enqueue into decision queue to be processed later
-            enqueue(decisionQueue, time + decision_time);
+            totalDecisionTime += decisionTime;
+            decisionEvents++;
         }
 
-        // Specialist decision phase - Process multiple patients at once
-        int specialists_available = params->specialist_count;
-        while (!is_empty(specialistQueue) && specialists_available > 0) {
+        // 4. Specialists process multiple patients (up to available count)
+        int specialistsWorking = 0;
+        while (!is_empty(specialistQueue) && specialistsWorking < availableSpecialists) {
             int arrivalTime = dequeue(specialistQueue, NULL);
-            specialists_available--;
+            int decisionTime = params->specialist_decision_time_from +
+                               rand() % (params->specialist_decision_time_to - params->specialist_decision_time_from + 1);
 
-            // Specialist's decision time
-            int specialist_decision_time = params->specialist_decision_time_from + rand() % 
-                                           (params->specialist_decision_time_to - params->specialist_decision_time_from + 1);
-            
-            total_decision_time += specialist_decision_time;
-            total_decision_events++;
+            totalWaitingTime += (time - arrivalTime + decisionTime);
 
-            total_waiting_time += time - arrivalTime + specialist_decision_time;
+            stats->total_specialist_visits++;
+            stats->money_spent += params->specialist_salary;
 
-            money_spent += params->specialist_salary;
-            total_specialist_visits++;
+            totalDecisionTime += decisionTime;
+            decisionEvents++;
+            specialistsWorking++;
         }
     }
 
-    // Store stats
-    stats->total_customers = total_customers;
-    stats->cured_customers = cured_customers;
-    stats->average_waiting_time = total_customers > 0 ? total_waiting_time / total_customers : 0;
-    stats->total_local_doctor_visits = total_local_doctor_visits;
-    stats->total_specialist_visits = total_specialist_visits;
-    stats->average_decision_time = total_decision_events > 0 ? total_decision_time / total_decision_events : 0;
-    stats->money_spent = money_spent;
+    stats->average_waiting_time = stats->total_customers > 0 ? totalWaitingTime / stats->total_customers : 0;
+    stats->average_decision_time = decisionEvents > 0 ? totalDecisionTime / decisionEvents : 0;
 
-    // Print results
     fprintf(output, "Total customers: %d\n", stats->total_customers);
     fprintf(output, "Cured customers: %d\n", stats->cured_customers);
     fprintf(output, "Average waiting time: %d\n", stats->average_waiting_time);
