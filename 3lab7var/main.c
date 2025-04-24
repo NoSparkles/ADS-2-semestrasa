@@ -18,14 +18,14 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (strcmp(argv[1], "-test") == 0) {
-        runDefaultTest();
-        runCustomTest(15, 5, 15, 0.3, 10, 100);
-        runCustomTest(20, 5, 15, 0.5, 10, 100);
-        runCustomTest(20, 5, 15, 0.3, 15, 100);
-        runCustomTest(20, 5, 15, 0.3, 10, 200);
-        return EXIT_SUCCESS;
-    }
+    // if (strcmp(argv[1], "-test") == 0) {
+    //     runDefaultTest();
+    //     runCustomTest(15, 5, 15, 0.3, 10, 100);
+    //     runCustomTest(20, 5, 15, 0.5, 10, 100);
+    //     runCustomTest(20, 5, 15, 0.3, 15, 100);
+    //     runCustomTest(20, 5, 15, 0.3, 10, 200);
+    //     return EXIT_SUCCESS;
+    // }
 
     FILE *input = stdin;
     if (strcmp(argv[1], "-") != 0) {
