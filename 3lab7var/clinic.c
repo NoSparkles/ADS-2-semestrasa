@@ -51,18 +51,21 @@ void readParams(SimulationParams *params, FILE *input) {
         exit(1);
     }
 
-    int read = fscanf(input, "%f %d %d %d %d %d %d %d %d",
+    int read = fscanf(input, "%f %d %d %d %d %d %d %d %d %f %f",
            &params->arrival_probability,
            &params->simulation_duration,
+           &params->local_doctor_count,
            &params->specialist_count,
            &params->local_doctor_salary,
            &params->specialist_salary,
            &params->local_doctor_decision_min,
            &params->local_doctor_decision_max,
            &params->specialist_decision_min,
-           &params->specialist_decision_max);
+           &params->specialist_decision_max,
+           &params->prob_cured_directly,
+           &params->prob_referred);
 
-    if (read != 9) {
+    if (read != 11) {
         fprintf(stderr, "Error: invalid input data format (%d parameters read).\n", read);
         exit(2);
     }
@@ -73,7 +76,6 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
 
     Queue *localDoctorQueue = create();
     Queue *specialistQueue = create();
-    Queue *waitingTimeQueue = create();  // Queue to store waiting times for patients
 
     int *localDoctorTimers = calloc(params->local_doctor_count, sizeof(int));
     int *specialistTimers = calloc(params->specialist_count, sizeof(int));
@@ -108,6 +110,8 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
                 float decision = (float)rand() / RAND_MAX;
                 if (decision < params->prob_cured_directly) {
                     stats->cured_patients++;
+                    int wait = time - arrivalTime;
+                    stats->total_waiting_time += wait;
                 } else if (decision < params->prob_cured_directly + params->prob_referred) {
                     enqueue(specialistQueue, time + decisionTime);
                 }
@@ -129,12 +133,7 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
                 specialistTimers[i] = treatmentTime;
 
                 // Calculate waiting time for the specialist
-                int wait = time - arrivalTime;
-
-                // Enqueue the patient's waiting time
-                enqueue(waitingTimeQueue, wait);
-
-                // Update total waiting time
+                int wait = -(time - arrivalTime);
                 stats->total_waiting_time += wait;
 
                 stats->total_specialist_visits++;
@@ -144,10 +143,10 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
         }
     }
 
-    // Calculate average waiting time (for treated patients only)
-    int totalTreatedPatients = stats->total_specialist_visits + stats->total_local_doctor_visits;
-    if (totalTreatedPatients > 0) {
-        stats->average_waiting_time = (float)stats->total_waiting_time / totalTreatedPatients;
+    // Calculate average waiting time (for cured patients only)
+    int totalCuredPatients = stats->cured_patients;
+    if (totalCuredPatients > 0) {
+        stats->average_waiting_time = (float)stats->total_waiting_time / totalCuredPatients;
     } else {
         stats->average_waiting_time = 0;
     }
@@ -159,12 +158,11 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
     fprintf(output, "Local doctor visits: %d\n", stats->total_local_doctor_visits);
     fprintf(output, "Specialist visits: %d\n", stats->total_specialist_visits);
     fprintf(output, "Total cost: %d\n", stats->total_cost);
-    fprintf(output, "Patients still in queue: %d\n", count(localDoctorQueue) + count(specialistQueue));  // Use count(queue) to track the number of patients in the queue
+    fprintf(output, "Patients still in queue: %d\n", count(localDoctorQueue) + count(specialistQueue));
 
     // Free dynamically allocated memory
     free(localDoctorTimers);
     free(specialistTimers);
     done(localDoctorQueue);
     done(specialistQueue);
-    done(waitingTimeQueue);  // Free the waiting time queue
 }

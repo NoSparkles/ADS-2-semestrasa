@@ -1,8 +1,8 @@
 run: build
 	echo 0.3           > params.txt
-	echo 10000        >> params.txt
+	echo 100        >> params.txt
 	echo 1            >> params.txt
-	echo 4            >> params.txt
+	echo 1            >> params.txt
 	echo 15           >> params.txt
 	echo 1            >> params.txt
 	echo 3            >> params.txt
