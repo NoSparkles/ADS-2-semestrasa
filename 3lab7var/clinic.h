@@ -17,12 +17,13 @@ typedef struct {
 } SimulationParams;
 
 typedef struct {
-    int *total_customers;
-    int *average_waiting_time;
-    int *total_local_doctor_visits;
-    int *total_specialist_visits;
-    int *max_waiting_time;
-    int *min_waiting_time;
+    int total_customers;
+    int cured_customers;
+    int average_waiting_time;
+    int total_local_doctor_visits;
+    int total_specialist_visits;
+    int average_decision_time;
+    int money_spent;
 } SimulationStats;
 
 void initParams(SimulationParams *params);
