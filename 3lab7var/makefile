@@ -12,6 +12,8 @@ run: build
 	echo 0.4          >> params.txt
 	./build params.txt
 
+test: build
+	./build -test
 
 build : main.c clinic.o queue.o
 	gcc -std=c99 -o build main.c clinic.o queue.o

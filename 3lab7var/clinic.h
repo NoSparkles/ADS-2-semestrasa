@@ -5,18 +5,18 @@
 #include <stdio.h>
 
 typedef struct {
-    float arrival_probability;  // Pacientų atvykimo tikimybė per laiko vienetą
-    int simulation_duration;    // Simuliacijos trukmė (laiko vienetai)
-    int local_doctor_count;     // Apylinkės gydytojų skaičius
-    int specialist_count;       // Specialistų skaičius
-    int local_doctor_salary;    // Apylinkės gydytojo atlyginimas
-    int specialist_salary;      // Specialisto atlyginimas
-    int local_doctor_decision_min; // Apylinkės gyd. sprendimo laiko ribos
+    float arrival_probability;
+    int simulation_duration;
+    int local_doctor_count;
+    int specialist_count;
+    int local_doctor_salary;
+    int specialist_salary;
+    int local_doctor_decision_min;
     int local_doctor_decision_max;
-    int specialist_decision_min;   // Specialisto sprendimo laiko ribos
+    int specialist_decision_min;
     int specialist_decision_max;
-    float prob_cured_directly;  // Tikimybė, kad pacientas pagydomas iškart
-    float prob_referred;        // Tikimybė, kad pacientas siunčiamas pas kitą specialistą
+    float prob_cured_directly;
+    float prob_referred;
 } SimulationParams;
 
 typedef struct {
@@ -34,8 +34,6 @@ void initParams(SimulationParams *params);
 void initStats(SimulationStats *stats);
 void freeStats(SimulationStats *stats);
 void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *output);
-void runDefaultTest();
-void runCustomTest(int plates, int eat_min, int eat_max, float prob, int wash, int duration);
 void readParams(SimulationParams *params, FILE *input);
 
 #endif
