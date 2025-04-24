@@ -109,13 +109,15 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
 
                 float decision = (float)rand() / RAND_MAX;
                 if (decision < params->prob_cured_directly) {
+                    // Patient is cured directly
                     stats->cured_patients++;
-                    int wait = time - arrivalTime;
-                    stats->total_waiting_time += wait;
+                    int timeInSystem = time + decisionTime - arrivalTime;
+                    stats->total_waiting_time += timeInSystem;
                 } else if (decision < params->prob_cured_directly + params->prob_referred) {
-                    enqueue(specialistQueue, time + decisionTime);
+                    // Referred to specialist
+                    enqueue(specialistQueue, arrivalTime);  // Keep original arrival time
                 }
-                // else: healthy, no action needed
+                // else: healthy, do nothing
             }
         }
 
@@ -132,9 +134,8 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
                                     rand() % (params->specialist_decision_max - params->specialist_decision_min + 1);
                 specialistTimers[i] = treatmentTime;
 
-                int wait = time - arrivalTime;  // ✅ FIXED: no minus sign
-                if (wait < 0) wait = 0;         // safeguard in case of early enqueue timestamp
-                stats->total_waiting_time += wait;
+                int timeInSystem = time + treatmentTime - arrivalTime;
+                stats->total_waiting_time += timeInSystem;
 
                 stats->total_specialist_visits++;
                 stats->total_cost += params->specialist_salary;
@@ -143,9 +144,10 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
         }
     }
 
-    // Calculate average waiting time (for cured patients only)
-    if (stats->cured_patients > 0) {
-        stats->average_waiting_time = (float)stats->total_waiting_time / stats->cured_patients;
+    // Calculate average time in system
+    int totalCuredPatients = stats->cured_patients;
+    if (totalCuredPatients > 0) {
+        stats->average_waiting_time = (float)stats->total_waiting_time / totalCuredPatients;
     } else {
         stats->average_waiting_time = 0;
     }
@@ -153,7 +155,7 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
     // Output results
     fprintf(output, "Total patients: %d\n", stats->total_patients);
     fprintf(output, "Cured patients: %d\n", stats->cured_patients);
-    fprintf(output, "Average waiting time: %.2f\n", stats->average_waiting_time);
+    fprintf(output, "Average time in system: %.2f\n", stats->average_waiting_time);
     fprintf(output, "Local doctor visits: %d\n", stats->total_local_doctor_visits);
     fprintf(output, "Specialist visits: %d\n", stats->total_specialist_visits);
     fprintf(output, "Total cost: %d\n", stats->total_cost);
