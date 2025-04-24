@@ -1,8 +1,11 @@
-main.exe : main.c longNum.o queue.o
-	gcc -std=c99 -o PgmName.exe main.c longNum.o queue.o -lm
+run: main.exe
+	./main.exe
+
+build : main.c clinic.o longNum.o queue.o
+   gcc -std=c99 -o main main.c clinic.o longNum.o queue.o
 
 clinic.o : clinic.c clinic.h
-	gcc -c -std=c99 clnic.c
+	gcc -c -std=c99 clinic.c
 
 longNum.o : longNum.c longNum.h
 	gcc -c -std=c99 longNum.c

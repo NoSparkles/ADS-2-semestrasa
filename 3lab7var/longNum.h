@@ -9,8 +9,9 @@ typedef struct {
 } LongNum;
 
 LongNum* createLongNum(const char *str);
+LongNum *createLongNumFromInt(int number);
 void destroyLongNum(LongNum *num);
-void printLongNum(const LongNum *num);
+void printLongNum(const LongNum num);
 
 LongNum* add(const LongNum *a, const LongNum *b);
 LongNum* sub(const LongNum *a, const LongNum *b);

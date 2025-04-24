@@ -3,7 +3,6 @@
 #include <string.h>
 #include "longNum.h"
 
-
 LongNum* createLongNum(const char *str) {
     LongNum *num = (LongNum*)malloc(sizeof(LongNum));
     num->length = strlen(str);
@@ -15,6 +14,11 @@ LongNum* createLongNum(const char *str) {
     return num;
 }
 
+LongNum *createLongNumFromInt(int number) {
+    char str[20];  // Pakankamai vietos konvertuoti skaičių į eilutę
+    sprintf(str, "%d", number);
+    return createLongNum(str);
+}
 
 void destroyLongNum(LongNum *num) {
     free(num->digits);
@@ -22,9 +26,9 @@ void destroyLongNum(LongNum *num) {
 }
 
 
-void printLongNum(const LongNum *num) {
-    for (int i = 0; i < num->length; i++) {
-        printf("%d", num->digits[i]);
+void printLongNum(const LongNum num) {
+    for (int i = 0; i < num.length; i++) {
+        printf("%d", num.digits[i]);
     }
     printf("\n");
 }

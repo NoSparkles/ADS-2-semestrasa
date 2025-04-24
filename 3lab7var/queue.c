@@ -22,7 +22,7 @@ LongNum *count(Queue *queue) {
 
 // Patikrina, ar eilė tuščia
 bool is_empty(Queue *queue) {
-    return equals(queue->size, createLongNum("0"));
+    return compare(queue->size, createLongNum("0"));
 }
 
 // Grąžina pirmo elemento reikšmę
@@ -65,7 +65,7 @@ LongNum *dequeue(Queue* queue, bool *status) {
     LongNum *value = queue->head->value;
     Node* oldHead = queue->head;
 
-    if (equals(queue->size, createLongNum("1"))) {
+    if (compare(queue->size, createLongNum("1"))) {
         queue->head = NULL;
         queue->tail = NULL;
     } else {
@@ -73,7 +73,7 @@ LongNum *dequeue(Queue* queue, bool *status) {
     }
 
     free(oldHead);
-    queue->size = subtract(queue->size, createLongNum("1"));
+    queue->size = sub(queue->size, createLongNum("1"));
     return value;
 }
 
@@ -98,7 +98,7 @@ void toString(Queue* queue) {
     printf("Queue: [ ");
 
     while (currentNode != NULL && current < MAX_ELEMENTS_TO_PRINT) {
-        printLongNum(currentNode->value);
+        printLongNum(*currentNode->value);
         currentNode = currentNode->next;
 
         if (currentNode != NULL && current < MAX_ELEMENTS_TO_PRINT) printf(" -> ");
@@ -134,7 +134,7 @@ void makeEmpty(Queue* queue) {
         temp = currentNode->next;
         free(currentNode);
         currentNode = temp;
-        queue->size = subtract(queue->size, createLongNum("1"));
+        queue->size = sub(queue->size, createLongNum("1"));
     }
 
     queue->head = NULL;

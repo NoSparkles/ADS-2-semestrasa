@@ -1,5 +1,5 @@
-#ifndef CAFETERIA_H
-#define CAFETERIA_H
+#ifndef CLINIC_H
+#define CLINIC_H
 
 #include "longNum.h"
 #include "queue.h"
