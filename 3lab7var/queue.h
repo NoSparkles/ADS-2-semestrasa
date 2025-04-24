@@ -1,3 +1,5 @@
+// paimta is mokinio kapa1135 ir modifikuota
+
 #ifndef QUEUE_H
 #define QUEUE_H
 
