@@ -51,21 +51,21 @@ void readParams(SimulationParams *params, FILE *input) {
         exit(1);
     }
 
-    int read = fscanf(input, "%f %d %d %d %d %d %d %d %d %f %f",
-           &params->arrival_probability,
-           &params->simulation_duration,
-           &params->local_doctor_count,
-           &params->specialist_count,
-           &params->local_doctor_salary,
-           &params->specialist_salary,
-           &params->local_doctor_decision_min,
-           &params->local_doctor_decision_max,
-           &params->specialist_decision_min,
-           &params->specialist_decision_max,
-           &params->prob_cured_directly,
-           &params->prob_referred);
+    int read = fscanf(input, "%f %d %d %d %d %d %d %d %d %d %f %f",
+        &params->arrival_probability,
+        &params->simulation_duration,
+        &params->local_doctor_count,
+        &params->specialist_count,
+        &params->local_doctor_salary,
+        &params->specialist_salary,
+        &params->local_doctor_decision_min,
+        &params->local_doctor_decision_max,
+        &params->specialist_decision_min,
+        &params->specialist_decision_max,
+        &params->prob_cured_directly,
+        &params->prob_referred);
 
-    if (read != 11) {
+    if (read != 12) {
         fprintf(stderr, "Error: invalid input data format (%d parameters read).\n", read);
         exit(2);
     }

@@ -1,19 +1,25 @@
 run: build
 	echo 0.3           > params.txt
-	echo 100        >> params.txt
+	echo 1000        >> params.txt
 	echo 1            >> params.txt
-	echo 1            >> params.txt
-	echo 15           >> params.txt
-	echo 1            >> params.txt
-	echo 3            >> params.txt
+	echo 8            >> params.txt
+	echo 5           >> params.txt
+	echo 20            >> params.txt
 	echo 5            >> params.txt
-	echo 7            >> params.txt
+	echo 10           >> params.txt
+	echo 15            >> params.txt
+	echo 25            >> params.txt
 	echo 0.4          >> params.txt
 	echo 0.4          >> params.txt
 	./build params.txt
 
 test: build
 	./build -test
+
+bb: build
+	./build
+
+all: build
 
 build : main.c clinic.o queue.o
 	gcc -std=c99 -o build main.c clinic.o queue.o

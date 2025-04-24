@@ -48,12 +48,52 @@ void runCustomTest(float arrival_probability, int simulation_duration, int local
 
 
 int main(int argc, char *argv[]) {
-    if (argc == 1) {
+    if (argc == 2 && strcmp(argv[1], "-h") == 0) {
         printUsage(argv[0]);
         return EXIT_FAILURE;
     }
+    FILE *input = stdin;
 
-    if (strcmp(argv[1], "-test") == 0) {
+    if (argc == 1) {
+        char configFileName[256];
+
+        // Extract the program name from argv[0] without path
+        char *programPath = argv[0];
+        char *programName = programPath;
+        for (char *p = programPath; *p != '\0'; p++) {
+            if (*p == '/' || *p == '\\') {  // handle both Unix and Windows
+                programName = p + 1;
+            }
+        }
+
+        // Copy the name to our buffer
+        strncpy(configFileName, programName, sizeof(configFileName) - 1);
+        configFileName[sizeof(configFileName) - 1] = '\0';
+
+        // Find last dot (extension)
+        char *extension = NULL;
+        for (char *p = configFileName; *p != '\0'; p++) {
+            if (*p == '.') {
+                extension = p;
+            }
+        }
+
+        if (extension != NULL) {
+            // Replace extension
+            strncpy(extension, ".cfg", sizeof(configFileName) - (extension - configFileName));
+        } else {
+            // Append ".cfg"
+            strncat(configFileName, ".cfg", sizeof(configFileName) - strlen(configFileName) - 1);
+        }
+
+        //printf("Using default configuration file: %s\n", configFileName);
+        input = fopen(configFileName, "r");
+        if (input == NULL) {
+            fprintf(stderr, "Error: Could not open file %s\n", configFileName);
+            return EXIT_FAILURE;
+        }
+    }
+    else if(strcmp(argv[1], "-test") == 0) {
         runDefaultTest();
         runCustomTest(0.3, 1000, 1, 3, 5, 20, 5, 10, 15, 25, 0.4, 0.4);
         runCustomTest(0.3, 1000, 1, 8, 5, 20, 5, 10, 15, 25, 0.4, 0.4);
@@ -61,9 +101,7 @@ int main(int argc, char *argv[]) {
         runCustomTest(0.3, 1000, 2, 3, 5, 20, 5, 10, 15, 25, 0.4, 0.4);
         return EXIT_SUCCESS;
     }
-
-    FILE *input = stdin;
-    if (strcmp(argv[1], "-") != 0) {
+    else if(strcmp(argv[1], "-") != 0) {
         input = fopen(argv[1], "r");
         if (input == NULL) {
             fprintf(stderr, "Error: Could not open file %s\n", argv[1]);
@@ -76,7 +114,6 @@ int main(int argc, char *argv[]) {
 
     initParams(&params);
     initStats(&stats);
-
 
     readParams(&params, input); // Override with input values
     if (input != stdin) {
