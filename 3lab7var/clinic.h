@@ -1,7 +1,6 @@
 #ifndef CLINIC_H
 #define CLINIC_H
 
-#include "longNum.h"
 #include "queue.h"
 #include <stdio.h>
 
@@ -18,12 +17,12 @@ typedef struct {
 } SimulationParams;
 
 typedef struct {
-    LongNum *total_customers;
-    LongNum *average_waiting_time;
-    LongNum *total_local_doctor_visits;
-    LongNum *total_specialist_visits;
-    LongNum *max_waiting_time;
-    LongNum *min_waiting_time;
+    int *total_customers;
+    int *average_waiting_time;
+    int *total_local_doctor_visits;
+    int *total_specialist_visits;
+    int *max_waiting_time;
+    int *min_waiting_time;
 } SimulationStats;
 
 void initParams(SimulationParams *params);

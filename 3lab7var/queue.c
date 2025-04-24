@@ -1,42 +1,41 @@
 #include "queue.h"
-#include "longnum.h"  // Įtraukiame LongNum biblioteką
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
-// Sukuria tuščią eilę ir grąžina jos adresą
+// Creates an empty queue and returns its address
 Queue* create() {
     Queue* queue = malloc(sizeof(Queue));
     if (!queue) return NULL;
 
     queue->head = NULL;
     queue->tail = NULL;
-    queue->size = createLongNum("0");  // Sukuriame `size` kaip `LongNum`
+    queue->size = 0;  // Now an integer instead of LongNum
     return queue;
 }
 
-// Grąžina elementų kiekį eilėje
-LongNum *count(Queue *queue) {
+// Returns the number of elements in the queue
+int count(Queue *queue) {
     return queue->size;
 }
 
-// Patikrina, ar eilė tuščia
+// Checks if the queue is empty
 bool is_empty(Queue *queue) {
-    return compare(queue->size, createLongNum("0"));
+    return queue->size == 0;
 }
 
-// Grąžina pirmo elemento reikšmę
-LongNum *peek(Queue *queue, bool *status) {
+// Returns the first element's value
+int peek(Queue *queue, bool *status) {
     if (is_empty(queue)) {
-        *status = false;
-        return createLongNum("0");
+        if (status) *status = false;
+        return 0; // Return 0 instead of creating a new LongNum
     }
-    *status = true;
+    if (status) *status = true;
     return queue->head->value;
 }
 
-// Prideda naują mazgą su reikšme į eilę
-void enqueue(Queue* queue, LongNum *value) {
+// Adds a new node with a value to the queue
+void enqueue(Queue* queue, int value) {
     Node *newNode = malloc(sizeof(Node));
     if (!newNode) return;
 
@@ -51,21 +50,23 @@ void enqueue(Queue* queue, LongNum *value) {
         queue->tail = newNode;
     }
     
-    queue->size = add(queue->size, createLongNum("1"));
+    queue->size++; // Increment the integer size directly
 }
 
-// Pašalina pirmą eilės elementą ir grąžina jo reikšmę
-LongNum *dequeue(Queue* queue, bool *status) {
+// Removes the first queue element and returns its value
+int dequeue(Queue *queue, bool *status) {
     if (is_empty(queue)) {
-        *status = false;
-        return createLongNum("0");
+        if (status) *status = false;
+        return 0; // Return 0 instead of creating a new LongNum
     }
 
-    *status = true;
-    LongNum *value = queue->head->value;
-    Node* oldHead = queue->head;
-
-    if (compare(queue->size, createLongNum("1"))) {
+    if (status) *status = true;
+    
+    Node *oldHead = queue->head;
+    int value = oldHead->value; // Store value safely
+    
+    // Update queue pointers correctly
+    if (queue->size == 1) {
         queue->head = NULL;
         queue->tail = NULL;
     } else {
@@ -73,11 +74,12 @@ LongNum *dequeue(Queue* queue, bool *status) {
     }
 
     free(oldHead);
-    queue->size = sub(queue->size, createLongNum("1"));
+    queue->size--; // Decrement the integer size directly
+
     return value;
 }
 
-// Patikrina, ar eilė pilna (jei trūksta atminties)
+// Checks if the queue is full (if memory runs out)
 bool isFull(Queue* queue) {
     Node *temp = malloc(sizeof(Node));
     if (!temp) return true;
@@ -85,20 +87,20 @@ bool isFull(Queue* queue) {
     return false;
 }
 
-// Išnaikina eilę
+// Clears the queue and frees memory
 void done(Queue* queue) {
     makeEmpty(queue);
     free(queue);
 }
 
-// Atvaizduoja eilę patogiu būdu
+// Displays the queue in a readable way
 void toString(Queue* queue) {
     Node* currentNode = queue->head;
     int current = 0;
     printf("Queue: [ ");
 
     while (currentNode != NULL && current < MAX_ELEMENTS_TO_PRINT) {
-        printLongNum(*currentNode->value);
+        printf("%d", currentNode->value);
         currentNode = currentNode->next;
 
         if (currentNode != NULL && current < MAX_ELEMENTS_TO_PRINT) printf(" -> ");
@@ -109,7 +111,7 @@ void toString(Queue* queue) {
     printf(" ]\n");
 }
 
-// Sukuria kloną eilės ir grąžina naują eilę su tais pačiais elementais
+// Creates a clone of the queue and returns a new queue with the same elements
 Queue* clone(Queue* queue) {
     Queue* cloneQueue = create();
     Node* currentNode = queue->head;
@@ -121,22 +123,11 @@ Queue* clone(Queue* queue) {
     return cloneQueue;
 }
 
-// Išvalo eilę, pašalina visus mazgus
+// Clears the queue, removing all nodes
 void makeEmpty(Queue* queue) {
-    if (is_empty(queue)) {
-        return;
-    }
-
-    Node* currentNode = queue->head;
-    Node* temp;
-
     while (!is_empty(queue)) {
-        temp = currentNode->next;
-        free(currentNode);
-        currentNode = temp;
-        queue->size = sub(queue->size, createLongNum("1"));
+        dequeue(queue, NULL);
     }
-
     queue->head = NULL;
     queue->tail = NULL;
 }

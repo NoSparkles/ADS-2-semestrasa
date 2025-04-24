@@ -8,16 +8,13 @@ run: build
 	echo 5 >> params.txt
 	echo 5 >> params.txt
 	echo 10 >> params.txt
-	./build params.txt > result1.txt
+	./build params.txt
 
-build : main.c clinic.o longNum.o queue.o
-	gcc -std=c99 -o build main.c clinic.o longNum.o queue.o
+build : main.c clinic.o queue.o
+	gcc -std=c99 -o build main.c clinic.o queue.o
    
 clinic.o : clinic.c clinic.h
 	gcc -c -std=c99 clinic.c
-
-longNum.o : longNum.c longNum.h
-	gcc -c -std=c99 longNum.c
 
 queue.o : queue.c queue.h
 	gcc -c -std=c99 queue.c

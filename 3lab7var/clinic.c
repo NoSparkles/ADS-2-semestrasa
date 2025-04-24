@@ -19,22 +19,23 @@ void initParams(SimulationParams *params) {
 }
 
 void initStats(SimulationStats *stats) {
-    stats->total_customers = createLongNum("0");
-    stats->average_waiting_time = createLongNum("0");
-    stats->total_local_doctor_visits = createLongNum("0");
-    stats->total_specialist_visits = createLongNum("0");
-    stats->max_waiting_time = createLongNum("0");
-    stats->min_waiting_time = createLongNum("0");
+    stats->total_customers = 0;
+    stats->average_waiting_time = 0;
+    stats->total_local_doctor_visits = 0;
+    stats->total_specialist_visits = 0;
+    stats->max_waiting_time = 0;
+    stats->min_waiting_time = INT_MAX; // Ensuring a high initial value for comparison
 }
 
 void freeStats(SimulationStats *stats) {
-    destroyLongNum(stats->total_customers);
-    destroyLongNum(stats->average_waiting_time);
-    destroyLongNum(stats->total_local_doctor_visits);
-    destroyLongNum(stats->total_specialist_visits);
-    destroyLongNum(stats->max_waiting_time);
-    destroyLongNum(stats->min_waiting_time);
+    stats->total_customers = 0;
+    stats->average_waiting_time = 0;
+    stats->total_local_doctor_visits = 0;
+    stats->total_specialist_visits = 0;
+    stats->max_waiting_time = 0;
+    stats->min_waiting_time = INT_MAX;
 }
+
 
 void readParams(SimulationParams *params, FILE *input) {
     fscanf(input, "%f %d %d %d %d %d %d %d %d",
@@ -54,32 +55,34 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
 
     Queue *localDoctorQueue = create();
     Queue *specialistQueue = create();
-    LongNum *total_waiting_time = createLongNum("0");
-    LongNum *total_customers = createLongNum("0");
-    LongNum *max_waiting_time = createLongNum("0");
-    LongNum *min_waiting_time = createLongNum("999999999");
-    LongNum *localDoctorPatients = createLongNum("0");
-    LongNum *specialistDirectPatients = createLongNum("0");
 
-    for (LongNum *time = createLongNum("0"); compare(time, createLongNumFromInt(params->simulation_duration)) < 0; time = add(time, createLongNum("1"))) {
+    int total_waiting_time = 0;
+    int total_customers = 0;
+    int max_waiting_time = 0;
+    int min_waiting_time = INT_MAX;
+    int localDoctorPatients = 0;
+    int specialistDirectPatients = 0;
+
+    for (int time = 0; time < params->simulation_duration; time++) {
         if ((float)rand() / RAND_MAX < params->arrival_probability) {
             enqueue(localDoctorQueue, time);
-            total_customers = add(total_customers, createLongNum("1"));
+            total_customers++;
 
             if ((float)rand() / RAND_MAX < 0.5) {
-                localDoctorPatients = add(localDoctorPatients, createLongNum("1"));
+                localDoctorPatients++;
             } else {
                 enqueue(specialistQueue, time);
-                specialistDirectPatients = add(specialistDirectPatients, createLongNum("1"));
+                specialistDirectPatients++;
             }
         }
 
         if (!is_empty(localDoctorQueue)) {
-            LongNum *arrivalTime = dequeue(localDoctorQueue, NULL);
-            LongNum *waiting_time = sub(time, arrivalTime);
-            total_waiting_time = add(total_waiting_time, waiting_time);
-            max_waiting_time = compare(waiting_time, max_waiting_time) > 0 ? waiting_time : max_waiting_time;
-            min_waiting_time = compare(waiting_time, min_waiting_time) < 0 ? waiting_time : min_waiting_time;
+            bool status = false;
+            int arrivalTime = dequeue(localDoctorQueue, &status);
+            int waiting_time = time - arrivalTime;
+            total_waiting_time += waiting_time;
+            if (waiting_time > max_waiting_time) max_waiting_time = waiting_time;
+            if (waiting_time < min_waiting_time) min_waiting_time = waiting_time;
 
             if ((float)rand() / RAND_MAX < 0.7) {
                 enqueue(specialistQueue, time);
@@ -87,31 +90,25 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
         }
 
         if (!is_empty(specialistQueue)) {
-            LongNum *arrivalTime = dequeue(specialistQueue, NULL);
-            LongNum *waiting_time = sub(time, arrivalTime);
-            total_waiting_time = add(total_waiting_time, waiting_time);
-            max_waiting_time = compare(waiting_time, max_waiting_time) > 0 ? waiting_time : max_waiting_time;
-            min_waiting_time = compare(waiting_time, min_waiting_time) < 0 ? waiting_time : min_waiting_time;
+            int arrivalTime = dequeue(specialistQueue, NULL);
+            int waiting_time = time - arrivalTime;
+            total_waiting_time += waiting_time;
+            if (waiting_time > max_waiting_time) max_waiting_time = waiting_time;
+            if (waiting_time < min_waiting_time) min_waiting_time = waiting_time;
         }
     }
 
     stats->total_customers = total_customers;
-    stats->average_waiting_time = longNumDiv(total_waiting_time, total_customers);
+    stats->average_waiting_time = total_customers > 0 ? total_waiting_time / total_customers : 0;
     stats->max_waiting_time = max_waiting_time;
     stats->min_waiting_time = min_waiting_time;
 
-    fprintf(output, "Total customers: ");
-    printLongNum(*stats->total_customers);
-    fprintf(output, "Average waiting time: ");
-    printLongNum(*stats->average_waiting_time);
-    fprintf(output, "Max waiting time: ");
-    printLongNum(*stats->max_waiting_time);
-    fprintf(output, "Min waiting time: ");
-    printLongNum(*stats->min_waiting_time);
-    fprintf(output, "Local doctor patients: ");
-    printLongNum(*localDoctorPatients);
-    fprintf(output, "Direct specialist patients: ");
-    printLongNum(*specialistDirectPatients);
+    fprintf(output, "Total customers: %d\n", stats->total_customers);
+    fprintf(output, "Average waiting time: %d\n", stats->average_waiting_time);
+    fprintf(output, "Max waiting time: %d\n", stats->max_waiting_time);
+    fprintf(output, "Min waiting time: %d\n", stats->min_waiting_time);
+    fprintf(output, "Local doctor patients: %d\n", localDoctorPatients);
+    fprintf(output, "Direct specialist patients: %d\n", specialistDirectPatients);
 
     done(localDoctorQueue);
     done(specialistQueue);

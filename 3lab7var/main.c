@@ -42,21 +42,14 @@ int main(int argc, char *argv[]) {
     initParams(&params); // Set defaults
     initStats(&stats);
 
-    printf("444444444444444444444444\n");
 
     readParams(&params, input); // Override with input values
     if (input != stdin) {
         fclose(input);
     }
 
-    printf("3333333333333333333333\n");
-
     runSimulation(&params, &stats, stdout);
 
-    printf("111111111111111111111111\n");
-
     freeStats(&stats);
-
-    printf("22222222222222222222222222\n");
     return EXIT_SUCCESS;
 }

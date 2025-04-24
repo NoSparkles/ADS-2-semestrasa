@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug",
+      "cwd": "c:/Users/Home/Desktop/mokslai/ADS-2-semestrasa/3lab7var",
+      "program": "c:/Users/Home/Desktop/mokslai/ADS-2-semestrasa/3lab7var/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

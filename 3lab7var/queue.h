@@ -1,17 +1,14 @@
-// sukurtas moikiniu kapa1135 ir pamodifikuotas manimi
-
 #ifndef QUEUE_H
 #define QUEUE_H
 
 #include <stdbool.h>
-#include "longnum.h"  // Įtraukiame LongNum biblioteką
 
 // Define the maximum elements to print
 #define MAX_ELEMENTS_TO_PRINT 10
 
 // Node structure
 typedef struct Node {
-    LongNum *value;        // Naudojame *LongNum vietoj int
+    int value;          // Change LongNum * to int
     struct Node *next;
 } Node;
 
@@ -19,16 +16,16 @@ typedef struct Node {
 typedef struct {
     Node *head;
     Node *tail;
-    LongNum *size;        // Naudojame *LongNum vietoj int
+    int size;          // Change LongNum * to int
 } Queue;
 
 // Function prototypes
 Queue *create();
-LongNum *count(Queue *queue);
+int count(Queue *queue);
 bool is_empty(Queue *queue);
-LongNum *peek(Queue *queue, bool *status);
-void enqueue(Queue *queue, LongNum *value);
-LongNum *dequeue(Queue *queue, bool *status);
+int peek(Queue *queue, bool *status);
+void enqueue(Queue *queue, int value);
+int dequeue(Queue *queue, bool *status);
 bool isFull(Queue *queue);
 void toString(Queue *queue);
 void makeEmpty(Queue *queue);
