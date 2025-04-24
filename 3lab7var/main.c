@@ -55,10 +55,10 @@ int main(int argc, char *argv[]) {
 
     if (strcmp(argv[1], "-test") == 0) {
         runDefaultTest();
-        runCustomTest(0.3, 1000, 1, 1, 5, 20, 1, 4, 4, 8, 0.5, 0.3);
-        runCustomTest(0.1, 500, 2, 5, 10, 30, 2, 5, 5, 15, 0.6, 0.2);
-        runCustomTest(0.4, 200, 3, 8, 15, 25, 1, 3, 3, 7, 0.7, 0.1);
-        runCustomTest(0.2, 300, 4, 3, 20, 40, 2, 6, 6, 12, 0.4, 0.4);
+        runCustomTest(0.3, 1000, 1, 3, 5, 20, 5, 10, 15, 25, 0.4, 0.4);
+        runCustomTest(0.3, 1000, 1, 8, 5, 20, 5, 10, 15, 25, 0.4, 0.4);
+        runCustomTest(0.3, 1000, 2, 5, 5, 20, 5, 10, 15, 25, 0.4, 0.4);
+        runCustomTest(0.3, 1000, 2, 3, 5, 20, 5, 10, 15, 25, 0.4, 0.4);
         return EXIT_SUCCESS;
     }
 

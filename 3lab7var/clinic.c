@@ -115,7 +115,7 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
                 } else if (decision < params->prob_cured_directly + params->prob_referred) {
                     enqueue(specialistQueue, time + decisionTime);
                 }
-                // else: healthy, do nothing
+                // else: healthy, no action needed
             }
         }
 
@@ -132,8 +132,8 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
                                     rand() % (params->specialist_decision_max - params->specialist_decision_min + 1);
                 specialistTimers[i] = treatmentTime;
 
-                // Calculate waiting time for the specialist
-                int wait = -(time - arrivalTime);
+                int wait = time - arrivalTime;  // ✅ FIXED: no minus sign
+                if (wait < 0) wait = 0;         // safeguard in case of early enqueue timestamp
                 stats->total_waiting_time += wait;
 
                 stats->total_specialist_visits++;
@@ -144,9 +144,8 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
     }
 
     // Calculate average waiting time (for cured patients only)
-    int totalCuredPatients = stats->cured_patients;
-    if (totalCuredPatients > 0) {
-        stats->average_waiting_time = (float)stats->total_waiting_time / totalCuredPatients;
+    if (stats->cured_patients > 0) {
+        stats->average_waiting_time = (float)stats->total_waiting_time / stats->cured_patients;
     } else {
         stats->average_waiting_time = 0;
     }
