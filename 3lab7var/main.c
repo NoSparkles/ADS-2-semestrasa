@@ -4,10 +4,11 @@
 #include <stdlib.h>
 
 void printUsage(char *programName) {
-    fprintf(stderr, "Usage: %s [-|filename] [-test]\n", programName);
+    fprintf(stderr, "Usage: %s [ |[filename] [-test] [-rnd <number>]]\n", programName);
     fprintf(stderr, "Options:\n");
     fprintf(stderr, "  filename: Read from specified file\n");
     fprintf(stderr, "  -test   : Run built-in test cases\n");
+    fprintf(stderr, "  -rnd <number>: Use specified random number for simulation\n");
     fprintf(stderr, "Input format:\n");
     fprintf(stderr, "arrival_probability simulation_duration local_doctor_count specialist_count local_doctor_salary specialist_salary local_doctor_decision_min local_doctor_decision_max specialist_decision_min specialist_decision_max prob_cured_directly prob_referred\n");
 }
@@ -68,13 +69,6 @@ int main(int argc, char *argv[]) {
             runCustomTest(0.3, 1000, 2, 5, 5, 20, 5, 10, 15, 25, 0.4, 0.4, 4);
             runCustomTest(0.3, 1000, 2, 3, 5, 20, 5, 10, 15, 25, 0.4, 0.4, 5);
             return EXIT_SUCCESS;
-        }
-        else if (strcmp(argv[i], "-") != 0) {
-            input = fopen(argv[i], "r");
-            if (input == NULL) {
-                fprintf(stderr, "Error: Could not open file %s\n", argv[i]);
-                return EXIT_FAILURE;
-            }
         }
     }
 
