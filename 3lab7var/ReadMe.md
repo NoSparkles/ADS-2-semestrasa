@@ -10,6 +10,17 @@ Programa analizuoja pacientų pasitenkinimą ir ekonominį efektyvumą remiantis
 
 ---
 
+## Projekto struktūra
+
+- `main.c` – Pagrindinis failas, kuriame vykdomas simuliacijos paleidimas ir valdymas.
+- `clinic.c` – Modulis, atsakingas už simuliacijos procesus ir statistiką.
+- `queue.c` – Eilės struktūra pacientų tvarkymui.
+- `clinic.c`, `queue.h` – Antraštiniai failai, apibrėžiantys funkcijų prototipus ir struktūras.
+- `makefile` – Kompiliacijos ir projekto tvarkymo taisyklės.
+- `Go.cmd` –  Komandinis skripto failas greitam paleidimui.
+
+---
+
 ## Įvesties parametrai
 Šie parametrai naudojami simuliacijai:
 
