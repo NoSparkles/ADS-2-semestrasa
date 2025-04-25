@@ -12,7 +12,7 @@ void printUsage(char *programName) {
     fprintf(stderr, "arrival_probability simulation_duration local_doctor_count specialist_count local_doctor_salary specialist_salary local_doctor_decision_min local_doctor_decision_max specialist_decision_min specialist_decision_max prob_cured_directly prob_referred\n");
 }
 
-void runDefaultTest(int randomNumber) {
+void runDefaultTest(unsigned randomNumber) {
     SimulationParams params;
     SimulationStats stats;
     initParams(&params);
@@ -22,7 +22,7 @@ void runDefaultTest(int randomNumber) {
     freeStats(&stats);
 }
 
-void runCustomTest(float arrival_probability, int simulation_duration, int local_doctor_count, int specialist_count, int local_doctor_salary, int specialist_salary, int local_doctor_decision_min, int local_doctor_decision_max, int specialist_decision_min, int specialist_decision_max, float prob_cured_directly, float prob_referred, int randomNumber) {
+void runCustomTest(float arrival_probability, int simulation_duration, int local_doctor_count, int specialist_count, int local_doctor_salary, int specialist_salary, int local_doctor_decision_min, int local_doctor_decision_max, int specialist_decision_min, int specialist_decision_max, float prob_cured_directly, float prob_referred, unsigned randomNumber) {
     SimulationParams params;
     SimulationStats stats;
     initParams(&params);
@@ -47,7 +47,7 @@ void runCustomTest(float arrival_probability, int simulation_duration, int local
 }
 
 int main(int argc, char *argv[]) {
-    int randomNumber = -1;  // Default value if -rnd is not provided
+    unsigned randomNumber = 0;  // Default value if -rnd is not provided
     char configFileName[256] = {0};
     FILE *input = stdin;
 
@@ -62,11 +62,11 @@ int main(int argc, char *argv[]) {
             return EXIT_FAILURE;
         }
         else if (strcmp(argv[i], "-test") == 0) {
-            runDefaultTest(randomNumber);
-            runCustomTest(0.3, 1000, 1, 3, 5, 20, 5, 10, 15, 25, 0.4, 0.4, randomNumber);
-            runCustomTest(0.3, 1000, 1, 8, 5, 20, 5, 10, 15, 25, 0.4, 0.4, randomNumber);
-            runCustomTest(0.3, 1000, 2, 5, 5, 20, 5, 10, 15, 25, 0.4, 0.4, randomNumber);
-            runCustomTest(0.3, 1000, 2, 3, 5, 20, 5, 10, 15, 25, 0.4, 0.4, randomNumber);
+            runDefaultTest(1);
+            runCustomTest(0.3, 1000, 1, 3, 5, 20, 5, 10, 15, 25, 0.4, 0.4, 2);
+            runCustomTest(0.3, 1000, 1, 8, 5, 20, 5, 10, 15, 25, 0.4, 0.4, 3);
+            runCustomTest(0.3, 1000, 2, 5, 5, 20, 5, 10, 15, 25, 0.4, 0.4, 4);
+            runCustomTest(0.3, 1000, 2, 3, 5, 20, 5, 10, 15, 25, 0.4, 0.4, 5);
             return EXIT_SUCCESS;
         }
         else if (strcmp(argv[i], "-") != 0) {

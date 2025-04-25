@@ -1,0 +1,9 @@
+Random number used for seeding: 20
+
+Total patients: 322
+Cured patients: 251
+Average time in system: 67.41
+Local doctor visits: 116
+Specialist visits: 198
+Total cost: 4540
+Patients still in queue: 47

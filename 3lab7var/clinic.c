@@ -71,11 +71,12 @@ void readParams(SimulationParams *params, FILE *input) {
     }
 }
 
-void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *output, int randomNumber) {
-    if (randomNumber != -1) {
+void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *output, unsigned randomNumber) {
+    if (randomNumber != 0) {
         srand(randomNumber);
     } else {
-        srand(time(NULL));
+        randomNumber = time(NULL);  // Use current time as seed if no random number is provided
+        srand(randomNumber);
     }
 
     Queue *localDoctorQueue = create();
@@ -155,6 +156,9 @@ void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *outpu
     } else {
         stats->average_waiting_time = 0;
     }
+
+    // output random number used for seeding
+    fprintf(output, "Random number used for seeding: %u\n\n", randomNumber);
 
     // Output results
     fprintf(output, "Total patients: %d\n", stats->total_patients);

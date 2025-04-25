@@ -1,0 +1,50 @@
+Random number used for seeding: 1
+
+Total patients: 52
+Cured patients: 47
+Average time in system: 7.19
+Local doctor visits: 17
+Specialist visits: 41
+Total cost: 700
+Patients still in queue: 0
+
+Random number used for seeding: 2
+
+Total patients: 307
+Cured patients: 193
+Average time in system: 151.45
+Local doctor visits: 116
+Specialist visits: 142
+Total cost: 3420
+Patients still in queue: 90
+
+Random number used for seeding: 3
+
+Total patients: 304
+Cured patients: 250
+Average time in system: 61.55
+Local doctor visits: 114
+Specialist visits: 198
+Total cost: 4530
+Patients still in queue: 29
+
+Random number used for seeding: 4
+
+Total patients: 294
+Cured patients: 262
+Average time in system: 21.05
+Local doctor visits: 141
+Specialist visits: 198
+Total cost: 4665
+Patients still in queue: 1
+
+Random number used for seeding: 5
+
+Total patients: 303
+Cured patients: 209
+Average time in system: 105.39
+Local doctor visits: 161
+Specialist visits: 147
+Total cost: 3745
+Patients still in queue: 61
+
