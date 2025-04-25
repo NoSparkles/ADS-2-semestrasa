@@ -24,6 +24,7 @@ echo 0.4 >> params.txt
 ./build params.txt > result1.txt
 ./build > result2.txt
 
+
 :toliau
 ./build -test > testresult.txt
 echo 0.3 > params.txt

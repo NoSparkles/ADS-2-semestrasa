@@ -17,7 +17,21 @@ test: build
 	./build -test
 
 bb: build
-	./build
+	./build -test > testresult.txt
+	echo 0.3 > params.txt
+	echo 1000 >> params.txt
+	echo 1 >> params.txt
+	echo 8 >> params.txt
+	echo 5 >> params.txt
+	echo 20>> params.txt
+	echo 5 >> params.txt
+	echo 10 >> params.txt
+	echo 15 >> params.txt
+	echo 25 >> params.txt
+	echo 0.4 >> params.txt
+	echo 0.4 >> params.txt
+	./build params.txt > result1.txt
+	./build > result2.txt
 
 all: build
 

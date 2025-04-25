@@ -33,7 +33,7 @@ typedef struct {
 void initParams(SimulationParams *params);
 void initStats(SimulationStats *stats);
 void freeStats(SimulationStats *stats);
-void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *output);
+void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *output, int randomNumber);
 void readParams(SimulationParams *params, FILE *input);
 
 #endif

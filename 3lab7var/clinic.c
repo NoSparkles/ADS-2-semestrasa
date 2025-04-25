@@ -71,8 +71,12 @@ void readParams(SimulationParams *params, FILE *input) {
     }
 }
 
-void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *output) {
-    srand(time(NULL));
+void runSimulation(SimulationParams *params, SimulationStats *stats, FILE *output, int randomNumber) {
+    if (randomNumber != -1) {
+        srand(randomNumber);
+    } else {
+        srand(time(NULL));
+    }
 
     Queue *localDoctorQueue = create();
     Queue *specialistQueue = create();
