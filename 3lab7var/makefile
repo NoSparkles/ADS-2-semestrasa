@@ -1,48 +1,8 @@
-run: build
-	echo 0.3           > params.txt
-	echo 1000        >> params.txt
-	echo 1            >> params.txt
-	echo 8            >> params.txt
-	echo 5           >> params.txt
-	echo 20            >> params.txt
-	echo 5            >> params.txt
-	echo 10           >> params.txt
-	echo 15            >> params.txt
-	echo 25            >> params.txt
-	echo 0.4          >> params.txt
-	echo 0.4          >> params.txt
-	./build params.txt
+build.exe : main.c queue.h clinic.h clinic.o queue.o
+	gcc -std=c99 -o build main.c clinic.o queue.o -lm
 
-test: build
-	./build -test
-
-bb: build
-	./build -test > testresult.txt
-	echo 0.3 > params.txt
-	echo 1000 >> params.txt
-	echo 1 >> params.txt
-	echo 8 >> params.txt
-	echo 5 >> params.txt
-	echo 20>> params.txt
-	echo 5 >> params.txt
-	echo 10 >> params.txt
-	echo 15 >> params.txt
-	echo 25 >> params.txt
-	echo 0.4 >> params.txt
-	echo 0.4 >> params.txt
-	./build params.txt > result1.txt
-	./build > result2.txt
-
-all: build
-
-build : main.c clinic.o queue.o
-	gcc -std=c99 -o build main.c clinic.o queue.o
-   
-clinic.o : clinic.c clinic.h
-	gcc -c -std=c99 clinic.c
+clinic.o : clinic.c clinic.h queue.h
+	gcc -std=c99 -c clinic.c
 
 queue.o : queue.c queue.h
-	gcc -c -std=c99 queue.c
-
-clean : 
-	rm -f build *.o
+	gcc -std=c99 -c queue.c

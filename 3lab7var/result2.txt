@@ -1,9 +1,9 @@
-Random number used for seeding: 1745578126
+Random number used for seeding: 1745578809
 
-Total patients: 308
-Cured patients: 227
-Average time in system: 66.10
-Local doctor visits: 119
-Specialist visits: 184
-Total cost: 4275
-Patients still in queue: 53
+Total patients: 318
+Cured patients: 258
+Average time in system: 58.03
+Local doctor visits: 118
+Specialist visits: 230
+Total cost: 5190
+Patients still in queue: 29
