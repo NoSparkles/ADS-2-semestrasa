@@ -8,6 +8,8 @@
 
 Programa analizuoja pacientų pasitenkinimą ir ekonominį efektyvumą remiantis įvestais parametrais.
 
+Šiame darbe buvo panaudota Eilė (Queue) - paimta iš **kapa1135** pirmojo laboratorinio darbo.
+
 ---
 
 ## Projekto struktūra
