@@ -1,5 +1,5 @@
 all: build
-	./main
+	./main input.txt > output.txt
 
 build: main.c graph.o
 	gcc -o main main.c graph.o

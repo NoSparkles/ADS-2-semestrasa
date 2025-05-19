@@ -1,33 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "graph.h"
 
-int main() {
-    int vertices = 7;
+int main(int argc, char* argv[]) {
+    FILE *input = stdin;
+
+    if (argc > 1) {
+        input = fopen(argv[1], "r");
+        if (!input) {
+            perror("cannot open input file");
+            return EXIT_FAILURE;
+        }
+    }
+
+    int vertices;
+    fscanf(input, "%d", &vertices);
     Graph* graph = createGraph(vertices);
 
-    // Adding edges to the graph
-    printf("Adding edges to the graph:\n");
-    addEdge(graph, 0, 1);
-    printf("Added: 0 -> 1\n");
-    addEdge(graph, 0, 2);
-    printf("Added: 0 -> 2\n");
-    addEdge(graph, 1, 3);
-    printf("Added: 1 -> 3\n");
-    addEdge(graph, 1, 4);
-    printf("Added: 1 -> 4\n");
-    addEdge(graph, 2, 5);
-    printf("Added: 2 -> 5\n");
-    addEdge(graph, 2, 6);
-    printf("Added: 2 -> 6\n");
+    int u, v;
+    while (fscanf(input, "%d %d", &u, &v) == 2) {
+        addEdge(graph, u, v);
+        printf("Added: %d -> %d\n", u, v);
+    }
 
-    // Displaying the initial graph
+    if (input != stdin) {
+        fclose(input);
+    }
+
     printf("\nGraph before converting to a tree:\n");
     printGraph(graph);
 
-    // Performing BFS to form a tree and printing its structure
     printf("\nBFS tree formation starting from vertex 0:\n");
     bfsToTree(graph, 0);
 
-    // Freeing allocated memory
     freeGraph(graph);
     return 0;
 }

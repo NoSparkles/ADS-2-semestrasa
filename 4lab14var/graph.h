@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAX_VERTICES 100
+#define MAX_VERTICES 10000
 
 typedef struct Node {
     int vertex;

@@ -1,0 +1,27 @@
+Added: 0 -> 1
+Added: 0 -> 2
+Added: 1 -> 3
+Added: 1 -> 4
+Added: 2 -> 5
+Added: 2 -> 6
+
+Graph before converting to a tree:
+
+Graph adjacency list:
+0: 2 1 
+1: 4 3 0 
+2: 6 5 0 
+3: 1 
+4: 1 
+5: 2 
+6: 2 
+
+BFS tree formation starting from vertex 0:
+
+Tree structure:
+0 -> 1
+0 -> 2
+1 -> 3
+1 -> 4
+2 -> 5
+2 -> 6
