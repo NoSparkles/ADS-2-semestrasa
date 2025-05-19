@@ -1,7 +1,4 @@
-all: build
-	./main input.txt > output.txt
-
-build: main.c graph.o
+main.exe: main.c graph.o
 	gcc -o main main.c graph.o
 
 graph.o: graph.c graph.h
