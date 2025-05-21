@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <memory.h>
 
 #define MAX_VERTICES 10000
 
